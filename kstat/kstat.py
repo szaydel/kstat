@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #
 # The contents of this file are subject to the terms of the
 # Common Development and Distribution License (the "License").
@@ -7,13 +8,14 @@
 # and limitations under the License.
 #
 #
-# Copyright 2011 Grigale Ltd. All rigths reserved.
-# Use is sujbect to license terms.
+# Copyright 2011 Grigale Ltd. All rights reserved.
+# Use is subject to license terms.
 #
 
 import ctypes as C
 import libkstat
 
+from sys import version_info
 
 class Kstat():
     def __init__(self, module='', instance=-1, name=''):
@@ -26,11 +28,23 @@ class Kstat():
         libkstat.kstat_close(self._ctl)
 
     def __str__(self):
-        s = 'Module: {0}, instance: {1}, name: {2}'.format(self._module, self._inst, self._name) 
+        """
+
+        """
+        if version_info[1] > 5:
+            s = 'Module: {0}, instance: {1}, name: {2}'.format(self._module, self._inst, self._name)
+        else:
+            ## Include this for older versions of python where .format is not a valid method
+            s = 'Module: %s, instance: %s, name: %s' % (self._module, self._inst, self._name)
         return s
 
     def __repr__(self):
-        s = 'Kstat("{0}", {1}, "{2}")'.format(self._module, self._inst, self._name) 
+
+        if version_info[1] > 5:
+            s = 'Kstat("{0}", {1}, "{2}")'.format(self._module, self._inst, self._name)
+        else:
+            ## Include this for older versions of python where .format is not a valid method
+            s = 'Kstat("%s", "%s", "%s")' % (self._module, self._inst, self._name)
         return s
 
     def lookup(self):
